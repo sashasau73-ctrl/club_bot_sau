@@ -9,7 +9,7 @@ from telegram.ext import (
     ChatJoinRequestHandler,
 )
 from config.config import TELEGRAM_TOKEN
-from bot.handlers.start_handler import start
+from bot.handlers.start_handler import start, button_handler
 
 from logs.logger import logger
 
@@ -28,5 +28,6 @@ def init_bot():
         persistent=True,
     )
     application.add_handler(conv_handler)
-    
+
+    application.add_handler(CallbackQueryHandler(button_handler))
     return application
