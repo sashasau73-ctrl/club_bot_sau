@@ -30,4 +30,5 @@ def init_bot():
     application.add_handler(conv_handler)
 
     application.add_handler(CallbackQueryHandler(button_handler))
+    
     return application
