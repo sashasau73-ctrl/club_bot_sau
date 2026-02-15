@@ -1,6 +1,6 @@
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 from telegram.ext import ContextTypes
-
+from config.config import WEBHOOK_URL, WEBAPP_PATH
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
@@ -22,11 +22,11 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await query.answer()
     if query.data == "menu_join":
         payment_keyboard = [
-            [InlineKeyboardButton("💳 Оплатить картой РФ", callback_data="pay_rf")],
+            [InlineKeyboardButton("💳 Оплатить картой РФ",web_app=WebAppInfo(url=WEBHOOK_URL + WEBAPP_PATH))],
             [
                 InlineKeyboardButton(
-                    "🌍 Оплатить зарубежной картой", callback_data="pay_foreign"
-                )
+                    "🌍 Оплатить зарубежной картой", web_app=WebAppInfo(url=WEBHOOK_URL + WEBAPP_PATH))
+                
             ],
             [InlineKeyboardButton("↩️ Назад", callback_data="back_to_menu")],
         ]

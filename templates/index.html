@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <script src="https://telegram.org/js/telegram-web-app.js?59"></script>
+    <title>Страница оплаты</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <style>
+        :root {
+            --bg1: #0b1020;
+            --bg2: #120a2a;
+            --neon1: #a855f7;
+            /* purple */
+            --neon2: #22d3ee;
+            /* cyan */
+            --card: #0f172aCC;
+            /* glass */
+            --text: #e8e7ff;
+            --muted: #bdb7ff;
+        }
+
+        /* Mobile-first: страница только для мобильных */
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(900px 600px at 15% 15%, rgba(168, 85, 247, .35), transparent 60%),
+                radial-gradient(900px 600px at 85% 25%, rgba(34, 211, 238, .25), transparent 55%),
+                radial-gradient(900px 600px at 50% 95%, rgba(168, 85, 247, .18), transparent 55%),
+                linear-gradient(160deg, var(--bg1), var(--bg2));
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Чтоб на больших экранах не было "десктопной" версии */
+        .mobile-wrap {
+            width: 100%;
+            max-width: 420px;
+            /* типичная ширина мобилок */
+        }
+
+        .glass-card {
+            background: var(--card);
+            border: 1px solid rgba(255, 255, 255, .12);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow:
+                0 12px 30px rgba(0, 0, 0, .45),
+                0 0 30px rgba(168, 85, 247, .18),
+                0 0 26px rgba(34, 211, 238, .10);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: "";
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(120deg, rgba(168, 85, 247, .45), rgba(34, 211, 238, .35), rgba(168, 85, 247, .25));
+            filter: blur(14px);
+            opacity: .35;
+            z-index: 0;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .title {
+            font-weight: 800;
+            letter-spacing: .2px;
+            text-shadow: 0 0 14px rgba(168, 85, 247, .35);
+        }
+
+        .subtitle {
+            color: var(--muted);
+            margin-bottom: 14px;
+        }
+
+        /* Инпут под палец + мягкий неон при фокусе */
+        .neon-input {
+            border-radius: 14px;
+            background: rgba(15, 23, 42, .65);
+            border: 1px solid rgba(255, 255, 255, .14);
+            color: var(--text);
+            padding: 14px 14px;
+            font-size: 18px;
+        }
+
+        .neon-input::placeholder {
+            color: rgba(232, 231, 255, .55);
+        }
+
+        .neon-input:focus {
+            background: rgba(15, 23, 42, .78);
+            border-color: rgba(34, 211, 238, .55);
+            box-shadow:
+                0 0 0 .18rem rgba(34, 211, 238, .18),
+                0 0 18px rgba(168, 85, 247, .25);
+            color: var(--text);
+        }
+
+        .hint {
+            font-size: 13px;
+            color: rgba(232, 231, 255, .70);
+        }
+
+        .neon-btn {
+            border: 0;
+            border-radius: 14px;
+            padding: 14px 16px;
+            font-weight: 700;
+            font-size: 16px;
+            color: #08101a;
+            background: linear-gradient(90deg, rgba(34, 211, 238, 1), rgba(168, 85, 247, 1));
+            box-shadow:
+                0 10px 22px rgba(0, 0, 0, .35),
+                0 0 18px rgba(34, 211, 238, .25),
+                0 0 20px rgba(168, 85, 247, .20);
+            transition: transform .08s ease, filter .15s ease;
+        }
+
+        .neon-btn:active {
+            transform: scale(.99);
+            filter: brightness(.98);
+        }
+
+        /* Удобные отступы под iPhone safe-area */
+        .safe {
+            padding-bottom: calc(16px + env(safe-area-inset-bottom));
+            padding-top: calc(16px + env(safe-area-inset-top));
+        }
+    </style>
+</head>
+
+<body>
+    <main class="mobile-wrap safe">
+        <section class="glass-card p-4">
+            <div class="card-content">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div>
+                        <h1 class="h3 title mb-1">Страница оплаты</h1>
+                        <div class="subtitle">Введите ваше имя и email для получения чека</div>
+                    </div>
+                    <div class="rounded-circle" style="
+              width:44px;height:44px;
+              background: radial-gradient(circle at 30% 30%, rgba(34,211,238,.9), rgba(168,85,247,.9));
+              box-shadow: 0 0 18px rgba(34,211,238,.25), 0 0 18px rgba(168,85,247,.22);
+            ">
+                    </div>
+                </div>
+                <label for="name-input" class="form-label mb-2 mt-3">Имя</label>
+                <input type="text" class="form-control neon-input" id="name-input" placeholder="Your name"
+                 autocomplete="name" />
+
+                <label for="email-input" class="form-label mb-2">Email</label>
+                <input type="email" class="form-control neon-input" id="email-input" placeholder="example@mail.com"
+                    inputmode="email" autocomplete="email" />
+
+                <div class="hint mt-2">Мы отправим подтверждение оплаты на указанный адрес.</div>
+
+                <button class="w-100 neon-btn mt-4" type="button">
+                    Продолжить
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+
+    </script>
+</body>
+
+</html>
