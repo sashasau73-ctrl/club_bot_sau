@@ -1,8 +1,16 @@
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 from telegram.ext import ContextTypes
 from config.config import WEBHOOK_URL, WEBAPP_PATH
+from db.users_crud import create_user, get_user_by_telegram_id, update_user_username
+from logs.logger import logger
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user = await get_user_by_telegram_id(update.effective_chat.id)
+    if not user:
+        user = await create_user(update.effective_chat.id, update.effective_user.username)
+    logger.info(f"Пользователь {user.id} ({user.username}) ({user.telegram_id}) ({user.created_at}) начал диалог")
+    user = await update_user_username(user.telegram_id, update.effective_user.username)
+    logger.info(f"Пользователь {user.id} ({user.username}) ({user.telegram_id}) ({user.created_at}) обновлен")
     keyboard = [
         [InlineKeyboardButton("✅ Вступить в клуб", callback_data="menu_join")],
         [InlineKeyboardButton("ℹ️ Зачем тебе в клуб", callback_data="menu_why")],
