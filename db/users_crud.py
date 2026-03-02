@@ -25,12 +25,17 @@ async def get_user_by_telegram_id(telegram_id: int):
 
 async def update_user_username(telegram_id: int, username: str):
     async with get_db_session() as session:
-        user = await get_user_by_telegram_id(telegram_id)
+        cursor = await session.execute(
+            select(User).where(User.telegram_id == telegram_id)
+        )
+        user = cursor.scalar_one_or_none()
         if user:
             user.username = username
             await session.commit()
             return user
         return None
+
+
 
 async def delete_user(telegram_id: int):
     async with get_db_session() as session:

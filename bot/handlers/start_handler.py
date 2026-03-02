@@ -9,8 +9,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not user:
         user = await create_user(update.effective_chat.id, update.effective_user.username)
     logger.info(f"Пользователь {user.id} ({user.username}) ({user.telegram_id}) ({user.created_at}) начал диалог")
-    user = await update_user_username(user.telegram_id, update.effective_user.username)
-    logger.info(f"Пользователь {user.id} ({user.username}) ({user.telegram_id}) ({user.created_at}) обновлен")
+    #await update_user_email(update.effective_chat.id, 'test@test.com')
+    # user = await update_user_username(user.telegram_id, update.effective_user.username)
+    # logger.info(f"Пользователь {user.id} ({user.username}) ({user.telegram_id}) ({user.created_at}) обновлен")
     keyboard = [
         [InlineKeyboardButton("✅ Вступить в клуб", callback_data="menu_join")],
         [InlineKeyboardButton("ℹ️ Зачем тебе в клуб", callback_data="menu_why")],

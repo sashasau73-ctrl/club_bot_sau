@@ -1,7 +1,9 @@
 from fastapi import APIRouter, Request, Response, status
-from config.config import TELEGRAM_PATH, TELEGRAM_SECRET_TOKEN
+from config.config import TELEGRAM_PATH, TELEGRAM_SECRET_TOKEN, WEBAPP_PATH
 from logs.logger import logger
 from telegram import Update
+
+from fastapi.responses import FileResponse
 
 router = APIRouter()
 
@@ -20,3 +22,7 @@ async def webhook(request: Request):
 
     await request.app.state.bot_app.update_queue.put(update)
     return Response(status_code=status.HTTP_200_OK)
+
+@router.get(WEBAPP_PATH)
+async def webapp(request: Request):
+    return FileResponse("./templates/index.html")
